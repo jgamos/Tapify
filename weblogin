@@ -1,0 +1,18 @@
+:global setName "Device";
+:local m [ip hotspot user get value-name=mac-address [find where dynamic]]
+
+/ip hotspot user add name=$m mac-address=$m profile=default disable=yes comment=temp;
+
+/ip hotspot user remove [find where dynamic]
+
+/file print file=$setName  where name=""
+:delay 1
+/file set $setName  contents=$m
+
+/tool fetch address=192.168.1.251 src-path=Device.txt user=pi mode=ftp password=raspberry dst-path="/home/pi/temp/Device.txt" upload=yes;
+:delay 10
+
+/file remove Device.txt
+/log info message=("Processing Web Login")
+  }
+}

@@ -1,0 +1,16 @@
+/ip hotspot user
+:foreach i in=[find] do={
+  :if ([get $i comment]~"temp") do={
+	:local mac [get $i mac-address]
+	:local com [get $i comment]
+
+/interface wireless registration-table remove [find mac-address=$mac];
+/ip hotspot host remove [find mac-address=$mac];
+/ip hotspot host remove [find where !authorized and !bypassed];
+/ip hotspot user remove [find comment=$com];
+  }
+}
+
+/ip hotspot profile set [find name="tapify"] login-by=mac,http-chap,http-pap,trial,mac-cookie
+  }
+}
